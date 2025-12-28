@@ -1,6 +1,7 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.grammarkit.tasks.GenerateParserTask
 
 plugins {
     id("java") // Java support
@@ -9,14 +10,36 @@ plugins {
     alias(libs.plugins.changelog) // Gradle Changelog Plugin
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
+    id("org.jetbrains.grammarkit") version "2023.3.0.1"
+
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/gen")
+        }
+    }
+}
+
+
+tasks.withType<GenerateParserTask>().configureEach {
+    sourceFile.set(file("src/main/grammar/Cobol.bnf"))
+
+    targetRootOutputDir.set(file("src/main/gen"))
+
+    pathToParser.set("com/github/radu88253/cobolparser/parser")
+    pathToPsiRoot.set("com/github/radu88253/cobolparser/psi")
+}
+
+
 
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
 
 // Set the JVM language level used to build the project.
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 
 // Configure project's dependencies

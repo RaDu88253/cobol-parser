@@ -1,0 +1,20 @@
+{
+  parserClass="com.github.radu88253.cobolparser.parser.CobolParserClass"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Cobol"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.radu88253.cobolparser.psi"
+  psiImplPackage="com.github.radu88253.cobolparser.psi.impl"
+
+  elementTypeHolderClass="com.github.radu88253.cobolparser.psi.CobolTypes"
+  elementTypeClass="com.github.radu88253.cobolparser.psi.CobolElementType"
+  tokenTypeClass="com.github.radu88253.cobolparser.psi.CobolTokenType"
+}
+
+CobolFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
