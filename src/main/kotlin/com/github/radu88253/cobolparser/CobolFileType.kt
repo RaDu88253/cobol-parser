@@ -5,7 +5,7 @@ import javax.swing.Icon
 
 class CobolFileType : LanguageFileType(CobolLanguage) {
 
-    override fun getName(): String = "COBOL file"
+    override fun getName(): String = "COBOL"
     override fun getDescription(): String = "COBOL source file"
 
     override fun getDefaultExtension(): String = "cob"

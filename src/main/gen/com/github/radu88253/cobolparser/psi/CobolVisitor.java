@@ -7,7 +7,19 @@ import com.intellij.psi.PsiElement;
 
 public class CobolVisitor extends PsiElementVisitor {
 
-  public void visitProperty(@NotNull CobolProperty o) {
+  public void visitPicClause(@NotNull CobolPicClause o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLine(@NotNull CobolLine o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLineNumber(@NotNull CobolLineNumber o) {
+    visitPsiElement(o);
+  }
+
+  public void visitToken(@NotNull CobolToken o) {
     visitPsiElement(o);
   }
 

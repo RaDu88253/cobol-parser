@@ -32,69 +32,130 @@ public class CobolParserClass implements PsiParser, LightPsiParser {
   }
 
   static boolean parse_root_(IElementType root_, PsiBuilder builder_, int level_) {
-    return CobolFile(builder_, level_ + 1);
+    return program(builder_, level_ + 1);
   }
 
   /* ********************************************************** */
-  // item_*
-  static boolean CobolFile(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CobolFile")) return false;
-    while (true) {
-      int pos_ = current_position_(builder_);
-      if (!item_(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "CobolFile", pos_)) break;
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // property|COMMENT|CRLF
-  static boolean item_(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "item_")) return false;
+  // IDENTIFIER LPARAN NUMBER RPARAN | NUMBER LPARAN NUMBER RPARAN
+  public static boolean PIC_CLAUSE(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "PIC_CLAUSE")) return false;
+    if (!nextTokenIs(builder_, "<pic clause>", IDENTIFIER, NUMBER)) return false;
     boolean result_;
-    result_ = property(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, COMMENT);
-    if (!result_) result_ = consumeToken(builder_, CRLF);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // (KEY? SEPARATOR VALUE?) | KEY
-  public static boolean property(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "property")) return false;
-    if (!nextTokenIs(builder_, "<property>", KEY, SEPARATOR)) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, PROPERTY, "<property>");
-    result_ = property_0(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, KEY);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, PIC_CLAUSE, "<pic clause>");
+    result_ = parseTokens(builder_, 0, IDENTIFIER, LPARAN, NUMBER, RPARAN);
+    if (!result_) result_ = parseTokens(builder_, 0, NUMBER, LPARAN, NUMBER, RPARAN);
     exit_section_(builder_, level_, marker_, result_, false, null);
     return result_;
   }
 
-  // KEY? SEPARATOR VALUE?
-  private static boolean property_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "property_0")) return false;
+  /* ********************************************************** */
+  // line_number (token DOT?)+ (CRLF | EOF?)
+  public static boolean line(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line")) return false;
+    if (!nextTokenIs(builder_, NUMBER)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = property_0_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, SEPARATOR);
-    result_ = result_ && property_0_2(builder_, level_ + 1);
+    result_ = line_number(builder_, level_ + 1);
+    result_ = result_ && line_1(builder_, level_ + 1);
+    result_ = result_ && line_2(builder_, level_ + 1);
+    exit_section_(builder_, marker_, LINE, result_);
+    return result_;
+  }
+
+  // (token DOT?)+
+  private static boolean line_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_1")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = line_1_0(builder_, level_ + 1);
+    while (result_) {
+      int pos_ = current_position_(builder_);
+      if (!line_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "line_1", pos_)) break;
+    }
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // KEY?
-  private static boolean property_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "property_0_0")) return false;
-    consumeToken(builder_, KEY);
+  // token DOT?
+  private static boolean line_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_1_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = token(builder_, level_ + 1);
+    result_ = result_ && line_1_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // DOT?
+  private static boolean line_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_1_0_1")) return false;
+    consumeToken(builder_, DOT);
     return true;
   }
 
-  // VALUE?
-  private static boolean property_0_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "property_0_2")) return false;
-    consumeToken(builder_, VALUE);
+  // CRLF | EOF?
+  private static boolean line_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_2")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, CRLF);
+    if (!result_) result_ = line_2_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // EOF?
+  private static boolean line_2_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_2_1")) return false;
+    consumeToken(builder_, EOF);
     return true;
+  }
+
+  /* ********************************************************** */
+  // NUMBER
+  public static boolean line_number(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "line_number")) return false;
+    if (!nextTokenIs(builder_, NUMBER)) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, NUMBER);
+    exit_section_(builder_, marker_, LINE_NUMBER, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // line+
+  static boolean program(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "program")) return false;
+    if (!nextTokenIs(builder_, NUMBER)) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = line(builder_, level_ + 1);
+    while (result_) {
+      int pos_ = current_position_(builder_);
+      if (!line(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "program", pos_)) break;
+    }
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // STRING | KEYWORD | PIC_CLAUSE | OPERATOR | NUMBER | IDENTIFIER
+  public static boolean token(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "token")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, TOKEN, "<token>");
+    result_ = consumeToken(builder_, STRING);
+    if (!result_) result_ = consumeToken(builder_, KEYWORD);
+    if (!result_) result_ = PIC_CLAUSE(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, OPERATOR);
+    if (!result_) result_ = consumeToken(builder_, NUMBER);
+    if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, level_, marker_, result_, false, null);
+    return result_;
   }
 
 }

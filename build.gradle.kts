@@ -2,6 +2,7 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 
 plugins {
     id("java") // Java support
@@ -11,7 +12,6 @@ plugins {
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
     id("org.jetbrains.grammarkit") version "2023.3.0.1"
-
 }
 
 sourceSets {
@@ -30,6 +30,14 @@ tasks.withType<GenerateParserTask>().configureEach {
 
     pathToParser.set("com/github/radu88253/cobolparser/parser")
     pathToPsiRoot.set("com/github/radu88253/cobolparser/psi")
+    purgeOldFiles.set(true)
+}
+
+
+tasks.withType<GenerateLexerTask>().configureEach {
+    sourceFile.set(file("src/main/kotlin/com/github/radu88253/cobolparser/lexer/Cobol.flex"))
+    targetOutputDir.set(file("src/main/gen/com/github/radu88253/cobolparser/lexer"))
+    purgeOldFiles.set(true)
 }
 
 

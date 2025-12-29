@@ -12,10 +12,14 @@
         <toolWindow factoryClass="com.github.radu88253.cobolparser.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <postStartupActivity implementation="com.github.radu88253.cobolparser.startup.MyProjectActivity" />
         <fileType
-                name="COBOL File"
+                name="COBOL"
                 implementationClass="com.github.radu88253.cobolparser.CobolFileType"
                 language="COBOL"
                 extensions="cob;cbl;ccp"
+        />
+        <lang.parserDefinition
+                language="COBOL"
+                implementationClass="com.github.radu88253.cobolparser.CobolParserDefinition"
         />
     </extensions>
 

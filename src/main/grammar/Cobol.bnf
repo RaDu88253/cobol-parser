@@ -13,8 +13,13 @@
   tokenTypeClass="com.github.radu88253.cobolparser.psi.CobolTokenType"
 }
 
-CobolFile ::= item_*
+program ::= line+
 
-private item_ ::= (property|COMMENT|CRLF)
+line ::= line_number (token DOT?)+ (CRLF | EOF?)
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+line_number ::= NUMBER
+
+token ::= STRING | KEYWORD | PIC_CLAUSE | OPERATOR | NUMBER | IDENTIFIER
+
+PIC_CLAUSE ::= IDENTIFIER LPARAN NUMBER RPARAN | NUMBER LPARAN NUMBER RPARAN
+
