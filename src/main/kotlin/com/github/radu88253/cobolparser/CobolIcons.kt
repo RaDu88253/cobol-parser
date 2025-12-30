@@ -5,6 +5,6 @@ import com.intellij.openapi.util.IconLoader
 object CobolIcons {
 
     @JvmField
-    val FILE = IconLoader.getIcon("/icons/jar-gray.png", CobolIcons::class.java)
+    val FILE = IconLoader.getIcon("/icons/Cobol.svg", CobolIcons::class.java)
 
 }
