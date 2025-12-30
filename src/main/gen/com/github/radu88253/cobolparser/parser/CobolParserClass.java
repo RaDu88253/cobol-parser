@@ -36,26 +36,26 @@ public class CobolParserClass implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER LPARAN NUMBER RPARAN | NUMBER LPARAN NUMBER RPARAN
+  // IDENTIFIER LPAREN NUMBER RPAREN | NUMBER LPAREN NUMBER RPAREN
   public static boolean PIC_CLAUSE(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "PIC_CLAUSE")) return false;
     if (!nextTokenIs(builder_, "<pic clause>", IDENTIFIER, NUMBER)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, PIC_CLAUSE, "<pic clause>");
-    result_ = parseTokens(builder_, 0, IDENTIFIER, LPARAN, NUMBER, RPARAN);
-    if (!result_) result_ = parseTokens(builder_, 0, NUMBER, LPARAN, NUMBER, RPARAN);
+    result_ = parseTokens(builder_, 0, IDENTIFIER, LPAREN, NUMBER, RPAREN);
+    if (!result_) result_ = parseTokens(builder_, 0, NUMBER, LPAREN, NUMBER, RPAREN);
     exit_section_(builder_, level_, marker_, result_, false, null);
     return result_;
   }
 
   /* ********************************************************** */
-  // line_number (token DOT?)+ (CRLF | EOF?)
+  // LINE_NUMBER (token DOT?)+ (CRLF | EOF?)
   public static boolean line(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "line")) return false;
-    if (!nextTokenIs(builder_, NUMBER)) return false;
+    if (!nextTokenIs(builder_, LINE_NUMBER)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = line_number(builder_, level_ + 1);
+    result_ = consumeToken(builder_, LINE_NUMBER);
     result_ = result_ && line_1(builder_, level_ + 1);
     result_ = result_ && line_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, LINE, result_);
@@ -114,22 +114,10 @@ public class CobolParserClass implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NUMBER
-  public static boolean line_number(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "line_number")) return false;
-    if (!nextTokenIs(builder_, NUMBER)) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, NUMBER);
-    exit_section_(builder_, marker_, LINE_NUMBER, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
   // line+
   static boolean program(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "program")) return false;
-    if (!nextTokenIs(builder_, NUMBER)) return false;
+    if (!nextTokenIs(builder_, LINE_NUMBER)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
     result_ = line(builder_, level_ + 1);

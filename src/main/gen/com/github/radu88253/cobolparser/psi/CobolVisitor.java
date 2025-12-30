@@ -15,10 +15,6 @@ public class CobolVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitLineNumber(@NotNull CobolLineNumber o) {
-    visitPsiElement(o);
-  }
-
   public void visitToken(@NotNull CobolToken o) {
     visitPsiElement(o);
   }

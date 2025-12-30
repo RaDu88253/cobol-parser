@@ -9,7 +9,6 @@ import com.github.radu88253.cobolparser.psi.impl.*;
 public interface CobolTypes {
 
   IElementType LINE = new CobolElementType("LINE");
-  IElementType LINE_NUMBER = new CobolElementType("LINE_NUMBER");
   IElementType PIC_CLAUSE = new CobolElementType("PIC_CLAUSE");
   IElementType TOKEN = new CobolElementType("TOKEN");
 
@@ -18,10 +17,11 @@ public interface CobolTypes {
   IElementType EOF = new CobolTokenType("EOF");
   IElementType IDENTIFIER = new CobolTokenType("IDENTIFIER");
   IElementType KEYWORD = new CobolTokenType("KEYWORD");
-  IElementType LPARAN = new CobolTokenType("LPARAN");
+  IElementType LINE_NUMBER = new CobolTokenType("LINE_NUMBER");
+  IElementType LPAREN = new CobolTokenType("LPAREN");
   IElementType NUMBER = new CobolTokenType("NUMBER");
   IElementType OPERATOR = new CobolTokenType("OPERATOR");
-  IElementType RPARAN = new CobolTokenType("RPARAN");
+  IElementType RPAREN = new CobolTokenType("RPAREN");
   IElementType STRING = new CobolTokenType("STRING");
 
   class Factory {
@@ -29,9 +29,6 @@ public interface CobolTypes {
       IElementType type = node.getElementType();
       if (type == LINE) {
         return new CobolLineImpl(node);
-      }
-      else if (type == LINE_NUMBER) {
-        return new CobolLineNumberImpl(node);
       }
       else if (type == PIC_CLAUSE) {
         return new CobolPicClauseImpl(node);

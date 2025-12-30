@@ -29,12 +29,6 @@ public class CobolLineImpl extends ASTWrapperPsiElement implements CobolLine {
 
   @Override
   @NotNull
-  public CobolLineNumber getLineNumber() {
-    return findNotNullChildByClass(CobolLineNumber.class);
-  }
-
-  @Override
-  @NotNull
   public List<CobolToken> getTokenList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CobolToken.class);
   }

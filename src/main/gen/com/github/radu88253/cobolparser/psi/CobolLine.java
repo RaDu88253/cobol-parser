@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface CobolLine extends PsiElement {
 
   @NotNull
-  CobolLineNumber getLineNumber();
-
-  @NotNull
   List<CobolToken> getTokenList();
 
 }

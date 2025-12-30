@@ -21,6 +21,13 @@
                 language="COBOL"
                 implementationClass="com.github.radu88253.cobolparser.CobolParserDefinition"
         />
+        <lang.syntaxHighlighterFactory
+                language="COBOL"
+                implementationClass="com.github.radu88253.cobolparser.CobolSyntaxHighlighterFactory"
+        />
+        <colorSettingsPage
+                implementation="com.github.radu88253.cobolparser.CobolColorSettingsPage"
+        />
     </extensions>
 
 

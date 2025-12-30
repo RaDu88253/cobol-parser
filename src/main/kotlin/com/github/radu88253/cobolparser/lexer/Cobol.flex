@@ -42,10 +42,11 @@ WHITE_SPACE=[\ \t\f]+
 
 '([^']|'')*'                                                 {return CobolTypes.STRING;}
 [A-Z]([A-Z0-9-]*[A-Z0-9])?                                   {return CobolTypes.IDENTIFIER;}
+^([0-9]{1,6})[\ \t]                                          {return CobolTypes.LINE_NUMBER;}
 [0-9]+                                                       {return CobolTypes.NUMBER;}
 [*-+/=]                                                      {return CobolTypes.OPERATOR;}
-"("                                                          {return CobolTypes.LPARAN;}
-")"                                                          {return CobolTypes.RPARAN;}
+"("                                                          {return CobolTypes.LPAREN;}
+")"                                                          {return CobolTypes.RPAREN;}
 {WHITE_SPACE}*{CRLF}{WHITE_SPACE}*                           {return CobolTypes.CRLF;}
 {WHITE_SPACE}+                                               { /* skip */ }
 "."                                                          {return CobolTypes.DOT;}
